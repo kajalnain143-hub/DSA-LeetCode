@@ -1,38 +1,27 @@
 class Solution {
 public:
-   void Island(vector<vector<char>>& grid,int i,int j,vector<vector<bool>> &visited){
-    if(i<0 || i>=grid.size() || j<0 || j>=grid[0].size() ){
+    void dfs(int r,int c,vector<vector<char>>&grid,vector<vector<int>>&visited){
+    if(r<0 || r>=grid.size() || c<0 || c>=grid[0].size() || visited[r][c]){
         return;
     }
-   
-      if(grid[i][j] == '0' || visited[i][j])
-    {
-        return;
+    if(grid[r][c] == '0') return;
+   visited[r][c] = 1;
+      dfs(r+1,c,grid,visited);
+      dfs(r-1,c,grid,visited);
+      dfs(r,c-1,grid,visited);
+      dfs(r,c+1,grid,visited);
     }
-
-    visited[i][j] = true;
-
-    Island(grid, i, j-1, visited);
-    Island(grid, i, j+1, visited);
-    Island(grid, i-1, j, visited);
-    Island(grid, i+1, j, visited);
-}
     int numIslands(vector<vector<char>>& grid) {
-       int row = grid.size();
-       int col = grid[0].size();
-       int count = 0;
-       vector<vector<bool>> visited(row, vector<bool>(col, false));
-        for(int i=0;i<row;i++){
+        vector<vector<int>>visited(grid.size(),vector<int>(grid[0].size(), 0));
+        int count =0;
+     for(int i=0;i<grid.size();i++){
         for(int j=0;j<grid[0].size();j++){
-           if(grid[i][j] == '1' && !visited[i][j]){
-      
-         count++;
-         
-    
-      Island(grid,i,j,visited);
-           }
+            if(grid[i][j]=='1' && visited[i][j]==0){
+                count++;
+            dfs(i,j,grid,visited);
+            }
         }
-        }
-      return count;
+     }
+     return count;
     }
 };
